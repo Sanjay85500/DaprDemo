@@ -1,0 +1,12 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: mybinding
+spec:
+  type: bindings.kubernetes
+  version: v1
+  metadata:
+  - name: namespace
+    value: binding-namespace
+  - name: resyncPeriodInSec
+    value: "200"

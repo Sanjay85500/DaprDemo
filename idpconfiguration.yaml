@@ -1,0 +1,40 @@
+#apiVersion: dapr.io/v1alpha1
+#kind: Configuration
+#metadata:
+#  name: idpconfig
+#spec:
+#  httpPipeline:
+#    handlers:
+#    - type: middleware.http.oauth2clientcredentials
+#      name: idpcom
+#---
+#apiVersion: dapr.io/v1alpha1
+#kind: Configuration
+#metadata:
+#  name: idpconfig
+#spec:
+#  httpPipeline:
+#    handlers:
+#    - name: bearer-tokens
+#      type: middleware.http.bearer
+#---
+#apiVersion: dapr.io/v1alpha1
+#kind: Configuration
+#metadata:
+#  name: idpconfig
+#spec:
+#  httpPipeline:
+#    handlers:
+#    - type: middleware.http.oauth2
+#      name: oauth2
+apiVersion: dapr.io/v1alpha1
+kind: Configuration
+metadata:
+  name: appconfig
+spec:
+  httpPipeline:
+    handlers:
+    - name: uppercase
+      type: middleware.http.uppercase
+    - name: oauth2
+      type: middleware.http.oauth2

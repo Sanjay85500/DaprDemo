@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "servicea.fullname" . }}
+  labels:
+    {{- include "servicea.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "servicea.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "servicea.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "servicea.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          env:
+           - name: ASPNETCORE_ENVIRONMENT
+             value: Development 
+           - name: value
+             valueFrom:
+               configMapKeyRef:
+                 name: configmap-servicea-env
+                 key: value1
+           - name: value1
+             valueFrom:
+               secretKeyRef:
+                 name: secret-servicea-env
+                 key: value1
+          volumeMounts:
+            - name: configmap-volume
+              mountPath: /app/config
+            - name: secret-volume
+              mountPath: /app/secret
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+       - name: configmap-volume
+         configMap:
+           name: configmap-servicea
+       - name: secret-volume
+         secret:
+           secretName: secret-servicea
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

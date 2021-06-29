@@ -1,0 +1,17 @@
+﻿apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-servicea-env
+data:
+  value1: Hi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-servicea
+data:
+  config.json: |
+    {
+        "value1":"Hello",
+        "value2":"Team"
+    }

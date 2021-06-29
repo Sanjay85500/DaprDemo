@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "dapractorservice.fullname" . }}
+  labels:
+    {{- include "dapractorservice.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: 3500
+      targetPort: dapr-http
+      protocol: TCP
+      name: dapr-http
+  selector:
+    {{- include "dapractorservice.selectorLabels" . | nindent 4 }}

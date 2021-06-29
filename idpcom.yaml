@@ -1,0 +1,62 @@
+#apiVersion: dapr.io/v1alpha1
+#kind: Component
+#metadata:
+#  name: idpcom
+#spec:
+#  type: middleware.http.oauth2clientcredentials
+#  version: v1
+#  metadata:
+#  - name: clientId
+#    value: "5b6bbd02-5e67-4418-9b24-02ca61a936e5"
+#  - name: clientSecret
+#    value: "Nc9v1v7f8~~fHmTBvs-_d7qAGQ.O-c6lvo"
+#  - name: tokenURL
+#    value: "https://login.microsoftonline.com/a9ec369e-b7f0-47ff-aaf9-8c0b74719c60/oauth2/token"
+#  - name: headerName
+#    value: "customheader"
+#---
+#apiVersion: dapr.io/v1alpha1
+#kind: Component
+#metadata:
+#  name: bearer-token
+#spec:
+#  type: middleware.http.bearer
+#  version: v1
+#  metadata:
+#  - name: clientId
+#    value: "sample"
+#  - name: issuerURL
+#    value: "http://my.idp.com"
+#---
+#apiVersion: dapr.io/v1alpha1
+#kind: Component
+#metadata:
+#  name: oauth2
+#spec:
+#  type: middleware.http.oauth2
+#  version: v1
+#  metadata:
+#  - name: clientId
+#    value: "nx-portal-v2"
+#  - name: clientSecret
+#    value: "D36125C5DC234F0CAAA584815405172B"
+#  - name: authURL
+#    value: "http://my.idp.com/connect/authorize"
+#  - name: tokenURL
+#    value: "http://my.idp.com/connect/token"
+#  - name: redirectURL
+#    value: "http://my.daprdemoserviceb.com/"
+#  - name: authHeaderName
+#    value: "authorization"
+
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: uppercase
+spec:
+  ignoreErrors: true
+  type: middleware.http.uppercase
+  version: v1
+  metadata:
+   - name: scopes
+     value: "*"
